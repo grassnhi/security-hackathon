@@ -2,33 +2,23 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-def sendNotification():
-    recepients_list = ""
-    subject = 'Subject'
-    message = "Message" 
-    sendemail(recepients_list,subject,message)
+# Set up the email details
+sender_email = "binh.lethanh@hcmut.edu.vn"
+receiver_email = "thanhtinh1234789@gmail.com"
+password = "nqtc om fjtz uif"
+subject = "Verify mail from callee"
+body = "This is a verification from Thanh Binh. If you receive this email and you are not in a call, please contact to warn your relatives who may be facing deepfake. Thank you./."
 
-def sendemail(to_addr_list, subject, message):
-    username = ''
-    password = ''   
-    from_addr = ''    
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.ehlo()
-    server.starttls()
-    server.login(username,password)
-    newmessage = '\r\n'.join([
-              'To: %s' %recepient_list,
-               'From: %s' % from_addr,
-                'Subject: %s' %subject,
-                '',
-                message
-                ])
-    try:    
-        server.sendmail(from_addr, to_addr_list,newmessage)
-        print('notification sent')
-    except:
-        print ('error sending notification')
-    server.quit()
+message = MIMEMultipart()
+message["From"] = sender_email
+message["To"] = receiver_email
+message["Subject"] = subject
+message.attach(MIMEText(body, "plain"))
 
 
-sendNotification()
+def sendMail():
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message.as_string())
+
+    print("Email sent successfully!")
