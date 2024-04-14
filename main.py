@@ -4,7 +4,7 @@ import random
 import werkzeug
 from string import ascii_uppercase
 from relative_recognition import *
-
+from deepFakeRecognition import *
 
 
 app = Flask(__name__)
@@ -45,6 +45,8 @@ def uploadImage():
     file.save('UserImage/' + str(file.filename))
     return 'File uploaded successfully', 200
 
-
+@app.route('/checkDeepFake', methods=['GET', 'POST'])
+def checkDeepFake():
+    return detect_deep_fake()
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='8080')
